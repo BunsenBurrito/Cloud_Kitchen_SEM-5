@@ -2,6 +2,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from '../pages/Landing/LandingPage';
 import SignInPage from '../pages/Auth/SignInPage';
+import AdminDashboard from '../pages/Admin/AdminDashboard';
+import SignUpPage from '../pages/Auth/SignUpPage';
+import MenuPage from '../pages/Menu/MenuPage';
 
 export default function AppRoutes() {
   return (
@@ -9,6 +12,9 @@ export default function AppRoutes() {
       {/* Public pages (before sign in) */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/signin" element={<SignInPage />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/menu" element={<MenuPage />} />
 
       {/* TODO: protected routes (orders, items, inventory, staff, billing...) */}
 
