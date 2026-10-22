@@ -9,7 +9,7 @@ Current status: **landing page only** (public page before sign in).
 
 ## Run the project
 ```bash
-cd cloud-kitchen-frontend   # 1. go into the project folder
+cd frontend                  # 1. go into the project folder
 npm install                 # 2. install dependencies
 npm run dev                 # 3. start the dev server
 ```
