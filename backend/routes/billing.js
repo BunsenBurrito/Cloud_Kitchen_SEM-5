@@ -12,7 +12,6 @@ const fullInclude = [
 ];
 const scope = (req) => (req.user.role === ROLES.CUSTOMER ? { customerId: req.user.id } : {});
 
-router.get('/test', (req, res) => res.json({ success: true, message: 'Billing routes are working ✅' }));
 
 router.use(protect);
 

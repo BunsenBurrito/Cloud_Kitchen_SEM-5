@@ -25,7 +25,6 @@ const saveRecipe = async (menuItemId, recipe, t) => {
   await MenuIngredient.bulkCreate(rows, { transaction: t });
 };
 
-router.get('/test', (req, res) => res.json({ success: true, message: 'Menu routes are working ✅' }));
 
 // GET /api/menu?category=Starter&foodType=Veg&isAvailable=true&q=paneer
 router.get('/', optionalAuth, asyncHandler(async (req, res) => {

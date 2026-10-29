@@ -19,7 +19,6 @@ const fullInclude = [
   },
 ];
 
-router.get('/test', (req, res) => res.json({ success: true, message: 'Purchases routes are working ✅' }));
 
 router.use(protect, authorize('admin', 'manager'));
 

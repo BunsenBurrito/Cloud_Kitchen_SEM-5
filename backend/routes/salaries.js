@@ -7,7 +7,6 @@ const { ApiError, asyncHandler, parseId, pick, filters, paginate, sendList } = r
 const FIELDS = ['staffId', 'month', 'amount', 'paymentStatus', 'paymentDate'];
 const withStaff = [{ model: Staff, as: 'staff', attributes: ['id', 'firstName', 'lastName', 'role', 'salary'] }];
 
-router.get('/test', (req, res) => res.json({ success: true, message: 'Salaries routes are working ✅' }));
 
 router.use(protect, authorize('admin', 'manager'));
 

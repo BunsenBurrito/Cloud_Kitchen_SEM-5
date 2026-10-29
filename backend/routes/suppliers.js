@@ -22,7 +22,6 @@ const saveLinks = async (supplier, body, t) => {
   if (body.inventoryItemIds !== undefined) await supplier.setInventoryItems(toIds(body.inventoryItemIds, 'inventoryItemIds'), { transaction: t });
 };
 
-router.get('/test', (req, res) => res.json({ success: true, message: 'Suppliers routes are working ✅' }));
 
 router.use(protect, authorize('admin', 'manager'));
 

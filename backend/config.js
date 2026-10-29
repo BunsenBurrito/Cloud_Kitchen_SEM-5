@@ -1,11 +1,12 @@
-// All settings (from .env) and the list of user roles, in one place.
 require('dotenv').config();
 
 if (!process.env.JWT_SECRET) {
-  throw new Error('JWT_SECRET is missing. Copy .env.example to .env and set it.');
+    throw new Error('JWT_SECRET is missing. Copy .env.example to .env and set it.');
 }
 
-const ROLES = { ADMIN: 'admin', MANAGER: 'manager', CHEF: 'chef', DELIVERY: 'delivery', CUSTOMER: 'customer' };
+const ROLES = {
+  ADMIN: 'admin',
+};
 
 module.exports = {
   port: process.env.PORT || 5000,
@@ -23,5 +24,4 @@ module.exports = {
     sqliteFile: process.env.DB_SQLITE_FILE || './cloud_kitchen.sqlite',
   },
   ROLES,
-  STAFF_ROLES: [ROLES.ADMIN, ROLES.MANAGER, ROLES.CHEF, ROLES.DELIVERY], // everyone except customers
 };

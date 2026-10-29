@@ -15,7 +15,6 @@ const sendAuth = (res, status, user) => {
 };
 
 // Quick check that this route file is mounted
-router.get('/test', (req, res) => res.json({ success: true, message: 'Auth routes are working ✅' }));
 
 // POST /api/auth/login  { email, password }
 router.post('/login', asyncHandler(async (req, res) => {

@@ -6,7 +6,6 @@ const { ApiError, asyncHandler, parseId, pick, filters, paginate, sendList, sear
 
 const FIELDS = ['name', 'category', 'isVeg', 'availableQuantity', 'unit', 'reorderLevel'];
 
-router.get('/test', (req, res) => res.json({ success: true, message: 'Ingredients routes are working ✅' }));
 
 router.use(protect, authorize('admin', 'manager', 'chef'));
 

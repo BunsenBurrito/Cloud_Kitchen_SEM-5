@@ -5,7 +5,6 @@ const { Order, MenuItem, Ingredient, Staff, Supplier, Payment } = require('../mo
 const { protect, authorize } = require('../middleware');
 const { asyncHandler } = require('../utils');
 
-router.get('/test', (req, res) => res.json({ success: true, message: 'Dashboard routes are working ✅' }));
 
 // GET /api/dashboard/summary
 router.get('/summary', protect, authorize('admin', 'manager'), asyncHandler(async (req, res) => {

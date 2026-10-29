@@ -11,16 +11,8 @@ const sequelize =
     ? new Sequelize({ ...common, storage: db.sqliteFile })
     : new Sequelize(db.name, db.user, db.password, { ...common, host: db.host, port: db.port });
 
-// Connects, creates the MySQL database if missing, and creates any missing tables.
 async function connectDB() {
-  if (db.dialect === 'mysql') {
-    const mysql = require('mysql2/promise');
-    const conn = await mysql.createConnection({ host: db.host, port: db.port, user: db.user, password: db.password });
-    await conn.query(`CREATE DATABASE IF NOT EXISTS \`${db.name}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
-    await conn.end();
-  }
   await sequelize.authenticate();
-  await sequelize.sync(); // creates tables that don't exist yet
   console.log(`SQL database connected (${db.dialect})`);
 }
 

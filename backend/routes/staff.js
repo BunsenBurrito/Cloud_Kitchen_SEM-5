@@ -6,7 +6,6 @@ const { ApiError, asyncHandler, parseId, pick, filters, paginate, sendList, sear
 
 const FIELDS = ['firstName', 'lastName', 'email', 'contactNumber', 'role', 'salary', 'hiringDate', 'isActive', 'userId'];
 
-router.get('/test', (req, res) => res.json({ success: true, message: 'Staff routes are working ✅' }));
 
 router.use(protect);
 

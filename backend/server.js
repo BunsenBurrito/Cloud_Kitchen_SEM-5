@@ -15,8 +15,8 @@ app.use(express.json({ limit: '10kb' }));                 // parse JSON bodies
 if (nodeEnv === 'development') app.use(morgan('dev'));    // request logging
 
 // Basic "is the server up?" messages
-app.get('/', (req, res) => res.send('Cloud Kitchen API is running 🍳'));
-app.get('/api/health', (req, res) => res.json({ success: true, message: 'API is healthy ✅', uptime: process.uptime() }));
+app.get('/', (req, res) => res.send('Cloud Kitchen API is running'));
+app.get('/api/health', (req, res) => res.json({ success: true, message: 'API is healthy', uptime: process.uptime() }));
 
 app.use('/api', require('./routes'));
 

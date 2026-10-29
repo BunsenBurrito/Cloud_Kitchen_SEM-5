@@ -14,7 +14,6 @@ const syncBill = async (payment, t) => {
   if (map[payment.status]) await Billing.update({ paymentStatus: map[payment.status] }, { where: { id: payment.billId }, transaction: t });
 };
 
-router.get('/test', (req, res) => res.json({ success: true, message: 'Payments routes are working ✅' }));
 
 router.use(protect);
 

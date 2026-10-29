@@ -32,7 +32,6 @@ const fullInclude = [
 // Customers can only touch their own orders; staff can touch all
 const scope = (req) => (req.user.role === ROLES.CUSTOMER ? { customerId: req.user.id } : {});
 
-router.get('/test', (req, res) => res.json({ success: true, message: 'Orders routes are working ✅' }));
 
 router.use(protect);
 

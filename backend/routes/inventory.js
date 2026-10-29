@@ -6,7 +6,6 @@ const { ApiError, asyncHandler, parseId, pick, paginate, sendList, searchWhere }
 
 const FIELDS = ['name', 'availableQuantity', 'unit', 'reorderLevel'];
 
-router.get('/test', (req, res) => res.json({ success: true, message: 'Inventory routes are working ✅' }));
 
 router.use(protect);
 
