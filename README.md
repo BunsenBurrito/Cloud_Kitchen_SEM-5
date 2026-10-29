@@ -5,7 +5,7 @@ A web app for the kitchen admin to run a cloud kitchen: take orders, manage the 
 | Part | Tech |
 |---|---|
 | **Frontend** (`frontend/`) | React 18, Vite, Material UI, React Router |
-| **Backend** (`backend/`) | Node.js, Express, Sequelize ORM, **MySQL** (PostgreSQL/SQLite supported), JWT auth, bcrypt |
+| **Backend** (`backend/`) | Node.js, Express, Sequelize ORM, **MySQL** (PostgreSQL/SQLite supported), JWT auth |
 | **Design** (`docs/`) | draw.io ER diagrams, schema + API documentation |
 
 ## Project structure
@@ -37,11 +37,9 @@ Cloud_Kitchen_SEM-5/
     ├── README.md                 documentation index
     ├── database-schema.md        relationship diagram + ER → model mapping
     ├── api-reference.md          all endpoints + examples
-    ├── er-diagrams/              open with diagrams.net
-    │   ├── er-overview.drawio
-    │   ├── er-part1-orders-billing-staff-menu.drawio
-    │   └── er-part2-purchasing-inventory.drawio
-    └── archive/structure-old.txt
+    ├── er-overview.drawio
+    ├── er-part1-orders-billing-staff-menu.drawio
+    └── er-part2-purchasing-inventory.drawio
 ```
 
 ## Getting started
@@ -58,7 +56,6 @@ npm run dev               # API on http://localhost:5000
 ```
 
 Default admin: `admin@cloudkitchen.com` / `Admin@12345`
-`npm run seed` also adds sample dishes, recipes, ingredients, staff, suppliers, customers and two orders.
 
 **2. Frontend**
 ```bash
@@ -70,11 +67,12 @@ npm run dev               # app on http://localhost:3000
 The backend only accepts browser requests from `CLIENT_URL` (default `http://localhost:3000`, set in `backend/.env`).
 
 ## Features (backend API)
-- **Auth** — JWT sign-in for the admin account only
-- **Menu & recipes** — dishes with per-serving ingredient recipes
-- **Orders** — pricing, automatic bill, status workflow, cancellation, delivery partner assignment
-- **Kitchen stock** — ingredients and inventory, automatic ingredient deduction when cooking starts, low-stock count
-- **Purchasing** — suppliers, purchase orders, "receive" to add stock
-- **People & money** — staff, monthly salary records, bills, payments, dashboard summary
+- **Authentication** - JWT sign-in for the admin account only
+- **Menu & recipes** - dishes with per-serving ingredient recipes
+- **Orders** - pricing, automatic bill, status workflow, cancellation, delivery partner assignment
+- **Kitchen stock** - ingredients and inventory, automatic ingredient deduction when cooking starts, low-stock count
+- **Purchasing** - suppliers, purchase orders, "receive" to add stock
+- **Staff & users** - staff, monthly salary records, customer records
+- **Billings & payment** - bill for each order and payment status
 
 Endpoints in [`docs/api-reference.md`](docs/api-reference.md).

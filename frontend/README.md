@@ -2,7 +2,6 @@
 
 React + Material UI admin app for the Cloud Kitchen Management System. A public landing page, one **admin sign-in**,
 and the admin screens for orders, billing, customers, menu and recipes, stock, suppliers, purchases, staff and salaries.
-It talks to the backend API (`../backend`); in development Vite forwards `/api` to `http://localhost:5000`.
 
 ## Run
 ```bash
@@ -10,7 +9,6 @@ cd frontend
 npm install
 npm run dev        # http://localhost:3000  (start the backend first, see ../README.md)
 ```
-`npm run build` makes a production build in `dist/`; `npm run preview` serves it.
 Sign in with the admin account created by `npm run seed` in the backend (default `admin@cloudkitchen.com` / `Admin@12345`).
 
 ## Structure

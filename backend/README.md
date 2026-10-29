@@ -1,7 +1,6 @@
 # Backend — Cloud Kitchen API
 
 Node.js + Express + SQL (Sequelize). Default database **MySQL**; PostgreSQL and SQLite also work via `DB_DIALECT` in `.env`.
-Deliberately simple: **no controllers** — the logic lives directly inside each file in `routes/`.
 
 ## Setup
 ```bash
@@ -22,17 +21,12 @@ npm run dev               # http://localhost:5000
 | `models.js` | **All tables**, relationships (foreign keys) and the DB connection |
 | `middleware.js` | `protect` (logged in?), `authorize(...roles)`, 404 and error handler |
 | `utils.js` | Helpers: `ApiError`, `asyncHandler`, `parseId`, `pick`, `filters`, `paginate`… |
-| `seed.js` | Creates the first admin and the sample menu |
+| `seed.js` | Creates the first admin |
 | `routes/*.js` | One file per component: `auth users menu orders staff salaries ingredients inventory suppliers purchases billing payments dashboard` |
 
 ## Quick checks
 ```bash
 curl localhost:5000/api/health
-curl localhost:5000/api/menu/test          # "Menu routes are working ✅" (every component has /test)
 curl -X POST localhost:5000/api/auth/login -H "Content-Type: application/json" \
      -d '{"email":"admin@cloudkitchen.com","password":"Admin@12345"}'
 ```
-
-## More
-- All endpoints, roles and examples: [`../docs/api-reference.md`](../docs/api-reference.md)
-- Tables and relationships: [`../docs/database-schema.md`](../docs/database-schema.md)
