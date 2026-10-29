@@ -1,5 +1,6 @@
 // /api/users — admin only: list / read / create / update / delete users (customers, staff logins, admins)
 const router = require('express').Router();
+const crypto = require('crypto');
 const { User } = require('../models');
 const { protect, authorize } = require('../middleware');
 const { ApiError, asyncHandler, parseId, pick, filters, paginate, sendList, searchWhere } = require('../utils');
@@ -24,7 +25,7 @@ router.get('/:id', asyncHandler(async (req, res) => {
 }));
 
 router.post('/', asyncHandler(async (req, res) => {
-  const user = await User.create(pick(req.body, FIELDS));
+  const user = await User.create({ ...pick(req.body, FIELDS), password: req.body.password || crypto.randomBytes(12).toString('hex') });
   const safe = user.toJSON();
   delete safe.password;
   res.status(201).json({ success: true, data: safe });

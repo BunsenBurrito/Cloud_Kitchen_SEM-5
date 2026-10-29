@@ -19,9 +19,10 @@ router.get('/summary', protect, authorize('admin', 'manager'), asyncHandler(asyn
     Payment.sum('amount', { where: { status: 'success' } }),
   ]);
 
+  const lowStockItems = await Ingredient.findAll({ where: where(col('availableQuantity'), Op.lte, col('reorderLevel')), attributes: ['id', 'name', 'unit', 'availableQuantity', 'reorderLevel'], limit: 8 });
   res.json({
     success: true,
-    data: { orders, activeOrders, menuItems, staff, suppliers, lowStockIngredients: lowStock, revenue: Number(revenue) || 0 },
+    data: { lowStockItems, orders, activeOrders, menuItems, staff, suppliers, lowStockIngredients: lowStock, revenue: Number(revenue) || 0 },
   });
 }));
 

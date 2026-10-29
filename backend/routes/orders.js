@@ -70,8 +70,11 @@ router.post('/', asyncHandler(async (req, res) => {
   });
   const totalCost = lines.reduce((sum, l) => sum + l.subtotal, 0);
 
-  const customerId = req.user.role === ROLES.CUSTOMER ? req.user.id : req.body.customerId ? parseId(req.body.customerId, 'customerId') : req.user.id;
-  const address = pick(deliveryAddress || req.user, ADDRESS_FIELDS); // default: the user's saved address
+  const customer = await User.findByPk(parseId(req.body.customerId, 'customerId'));
+  if (!customer || customer.role !== ROLES.CUSTOMER)
+    throw new ApiError(400, 'customerId must be an existing customer');
+  const customerId = customer.id;
+  const address = pick(deliveryAddress || customer, ADDRESS_FIELDS); // default: the customer's saved address
   const addressText = [address.flatNo, address.societyName, address.street, address.city, address.state].filter(Boolean).join(', ');
 
   const { order, bill } = await sequelize.transaction(async (t) => {

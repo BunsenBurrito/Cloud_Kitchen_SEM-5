@@ -1,4 +1,4 @@
-// /api/auth — sign up, sign in, profile
+// /api/auth — admin sign in and profile (there is no public sign-up)
 const router = require('express').Router();
 const { User } = require('../models');
 const { ROLES } = require('../config');
@@ -17,20 +17,6 @@ const sendAuth = (res, status, user) => {
 // Quick check that this route file is mounted
 router.get('/test', (req, res) => res.json({ success: true, message: 'Auth routes are working ✅' }));
 
-// POST /api/auth/register  { name, email, password, phone? }
-// Public sign-up. ALWAYS creates a customer — a "role" in the body is ignored.
-router.post('/register', asyncHandler(async (req, res) => {
-  const { name, email, password, phone } = req.body;
-  // typeof checks reject object payloads like { "email": { "$gt": "" } }
-  if (![name, email, password].every(isString)) throw new ApiError(400, 'name, email and password are required');
-
-  const exists = await User.findOne({ where: { email: email.trim().toLowerCase() } });
-  if (exists) throw new ApiError(409, 'An account with this email already exists');
-
-  const user = await User.create({ name, email, password, phone: isString(phone) ? phone : null, role: ROLES.CUSTOMER });
-  sendAuth(res, 201, user);
-}));
-
 // POST /api/auth/login  { email, password }
 router.post('/login', asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -40,6 +26,8 @@ router.post('/login', asyncHandler(async (req, res) => {
   // Same message for "no such user" and "wrong password" so emails can't be discovered
   if (!user || !(await user.comparePassword(password))) throw new ApiError(401, 'Invalid email or password');
   if (!user.isActive) throw new ApiError(403, 'This account has been deactivated');
+  if (user.role !== ROLES.ADMIN)
+    throw new ApiError(403, 'Only the admin can sign in');
   sendAuth(res, 200, user);
 }));
 

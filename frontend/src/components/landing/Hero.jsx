@@ -1,17 +1,21 @@
-// Hero: headline, short pitch, two buttons, and a small decorative order card
-// that shows the status colors used across the app.
-import { Box, Container, Typography, Button, Paper, Stack, Chip } from '@mui/material';
+// Hero: headline, short pitch, two buttons, and a card with the kitchen's latest orders (real data once the admin is signed in).
+import { useEffect, useState } from 'react';
+import { Box, Container, Typography, Button, Paper, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid2'; // MUI v6 grid that supports the `size` prop
 import { Link as RouterLink } from 'react-router-dom';
-
-// Sample data only (not real). Chip colors map to the status palette in theme.js.
-const sampleOrders = [
-  { id: '#1042', item: 'Butter Chicken Bowl', status: 'Placed', color: 'secondary' },
-  { id: '#1043', item: 'Paneer Wrap', status: 'Preparing', color: 'warning' },
-  { id: '#1044', item: 'Veg Biryani', status: 'Delivered', color: 'success' },
-];
+import { api } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
+import StatusChip from '../common/StatusChip';
 
 export default function Hero() {
+  const { user } = useAuth();
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    if (user)
+      api.get('/orders?limit=3').then((d) => setOrders(d.data)).catch(() => {});
+  }, [user]);
+
   return (
     <Container maxWidth="lg" sx={{ py: { xs: 8, md: 12 } }}>
       <Grid container spacing={{ xs: 5, md: 8 }} alignItems="center">
@@ -23,20 +27,22 @@ export default function Hero() {
             Orders, menu, stock, staff and billing, all in one simple dashboard.
           </Typography>
           <Stack direction="row" spacing={2} sx={{ mt: 5 }}>
-            <Button component={RouterLink} to="/signin" variant="contained" size="large">Get started</Button>
+            <Button component={RouterLink} to={user ? '/dashboard' : '/signin'} variant="contained" size="large">{user ? 'Open dashboard' : 'Admin sign in'}</Button>
             <Button href="#features" variant="outlined" size="large">See features</Button>
           </Stack>
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 4 }}>
-            <Typography variant="caption" color="text.secondary">Live orders</Typography>
+            <Typography variant="caption" color="text.secondary">Latest orders</Typography>
+            {!user && <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>Sign in as admin to see your live orders here.</Typography>}
+            {user && orders.length === 0 && <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>No orders yet.</Typography>}
             <Stack spacing={2.5} sx={{ mt: 2.5 }}>
-              {sampleOrders.map((o) => (
+              {orders.map((o) => (
                 <Box key={o.id} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Typography variant="body2" fontWeight={600}>{o.id}</Typography>
-                  <Typography variant="body2" sx={{ flexGrow: 1 }}>{o.item}</Typography>
-                  <Chip size="small" label={o.status} color={o.color} />
+                  <Typography variant="body2" fontWeight={600}>#{o.id}</Typography>
+                  <Typography variant="body2" sx={{ flexGrow: 1 }}>{o.items.map((i) => `${i.quantity}× ${i.name}`).join(', ')}</Typography>
+                  <StatusChip status={o.status} />
                 </Box>
               ))}
             </Stack>

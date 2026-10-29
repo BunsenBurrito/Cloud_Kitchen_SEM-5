@@ -1,6 +1,6 @@
 // Auth middleware + 404 + error handler, all in one file.
 const jwt = require('jsonwebtoken');
-const { jwtSecret, nodeEnv } = require('./config');
+const { jwtSecret, nodeEnv, ROLES } = require('./config');
 const { User } = require('./models');
 const { ApiError, asyncHandler } = require('./utils');
 
@@ -22,7 +22,10 @@ const getUser = async (req) => {
 // Must be logged in. Sets req.user.
 const protect = asyncHandler(async (req, res, next) => {
   const user = await getUser(req);
-  if (!user) throw new ApiError(401, 'Not authenticated. Please sign in.');
+  if (!user)
+    throw new ApiError(401, 'Not authenticated. Please sign in.');
+  if (user.role !== ROLES.ADMIN)
+    throw new ApiError(403, 'Admin access only.');
   req.user = user;
   next();
 });

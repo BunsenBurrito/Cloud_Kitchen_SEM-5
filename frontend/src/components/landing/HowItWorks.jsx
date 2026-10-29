@@ -3,7 +3,7 @@ import { Box, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2'; // MUI v6 grid that supports the `size` prop
 
 const steps = [
-  { title: 'Customer orders', text: 'Picks dishes and places an order.' },
+  { title: 'Order is taken', text: 'Staff enter the customer\'s dishes and address.' },
   { title: 'Kitchen cooks', text: 'A chef prepares it and stock updates.' },
   { title: 'Partner delivers', text: 'Delivery staff bring it to the door.' },
   { title: 'Bill is paid', text: 'Payment is recorded against the order.' },

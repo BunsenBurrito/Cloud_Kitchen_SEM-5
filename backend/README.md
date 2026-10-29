@@ -12,7 +12,7 @@ npm run dev               # http://localhost:5000
 ```
 - No MySQL? `npm i sqlite3` and set `DB_DIALECT=sqlite`. PostgreSQL: `npm i pg pg-hstore`, `DB_DIALECT=postgres`, `DB_PORT=5432`.
 - `CLIENT_URL` (CORS) must match the frontend address — default `http://localhost:3000`.
-- Default admin: `admin@cloudkitchen.com` / `Admin@12345` (from `.env`).
+- Only the admin account can sign in; there is no public sign-up. Default admin: `admin@cloudkitchen.com` / `Admin@12345` (from `.env`).
 
 ## Files
 | File | Purpose |

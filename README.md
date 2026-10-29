@@ -1,7 +1,6 @@
 # Cloud Kitchen Management System (SEM-5)
 
-A web app to run a cloud kitchen: customers browse the menu and order online; the kitchen team manages
-orders, recipes, stock, suppliers, purchases, staff, salaries, billing and payments.
+A web app for the kitchen admin to run a cloud kitchen: take orders, manage the menu and recipes, stock, suppliers, purchases, staff, salaries, billing and payments. One admin account signs in. Customers are stored as records and not allowed to log in.
 
 | Part | Tech |
 |---|---|
@@ -12,26 +11,11 @@ orders, recipes, stock, suppliers, purchases, staff, salaries, billing and payme
 ## Project structure
 ```
 Cloud_Kitchen_SEM-5/
-├── README.md                     ← you are here
+├── README.md                     
 ├── .gitignore
 │
 ├── frontend/                     React + Vite app (http://localhost:3000)
-│   ├── index.html
-│   ├── package.json
-│   ├── vite.config.js
-│   └── src/
-│       ├── main.jsx, App.jsx
-│       ├── routes/AppRoutes.jsx          all page routes
-│       ├── pages/
-│       │   ├── Landing/LandingPage.jsx
-│       │   ├── Auth/SignInPage.jsx, SignUpPage.jsx
-│       │   ├── Menu/MenuPage.jsx
-│       │   └── Admin/AdminDashboard.jsx
-│       ├── components/landing/           Navbar, Hero, Features, HowItWorks, Footer
-│       ├── components/common/            (shared components — empty for now)
-│       ├── services/                     (API calls go here — empty for now)
-│       ├── context/, hooks/, utils/      (placeholders)
-│       └── theme/theme.js
+│   └── src/                      main.jsx, routes/, pages/, components/, context/, hooks/, services/, theme/ (see frontend/README.md)
 │
 ├── backend/                      Express + SQL REST API (http://localhost:5000)
 │   ├── server.js                 starts Express, mounts routes, connects to the DB
@@ -62,8 +46,7 @@ Cloud_Kitchen_SEM-5/
 
 ## Getting started
 
-**Prerequisites:** Node.js 18+, and a running **MySQL** server (XAMPP, MySQL Workbench or Docker).
-No MySQL? Use SQLite instead: `npm i sqlite3` in `backend/` and set `DB_DIALECT=sqlite` in `.env`.
+**Prerequisites:** Node.js 18+, and a running **MySQL** server.
 
 **1. Backend**
 ```bash
@@ -73,10 +56,11 @@ cp .env.example .env      # set DB_USER, DB_PASSWORD (MySQL login) and JWT_SECRE
 npm run seed              # creates the database + tables, an admin user, and the sample menu
 npm run dev               # API on http://localhost:5000
 ```
-Check it works: open <http://localhost:5000/api/health> or `http://localhost:5000/api/menu/test`.
-Default admin: `admin@cloudkitchen.com` / `Admin@12345` (change it in `.env` before seeding).
 
-**2. Frontend** (second terminal)
+Default admin: `admin@cloudkitchen.com` / `Admin@12345`
+`npm run seed` also adds sample dishes, recipes, ingredients, staff, suppliers, customers and two orders.
+
+**2. Frontend**
 ```bash
 cd frontend
 npm install
@@ -86,24 +70,11 @@ npm run dev               # app on http://localhost:3000
 The backend only accepts browser requests from `CLIENT_URL` (default `http://localhost:3000`, set in `backend/.env`).
 
 ## Features (backend API)
-- **Auth & roles** — JWT sign-up/sign-in; roles: admin, manager, chef, delivery, customer
-- **Menu & recipes** — dishes (Veg / Non-Veg, category, price) with per-serving ingredient recipes
-- **Orders** — server-side pricing, automatic bill, status workflow, cancellation, delivery partner assignment
+- **Auth** — JWT sign-in for the admin account only
+- **Menu & recipes** — dishes with per-serving ingredient recipes
+- **Orders** — pricing, automatic bill, status workflow, cancellation, delivery partner assignment
 - **Kitchen stock** — ingredients and inventory, automatic ingredient deduction when cooking starts, low-stock count
 - **Purchasing** — suppliers, purchase orders, "receive" to add stock
 - **People & money** — staff, monthly salary records, bills, payments, dashboard summary
 
-See [`docs/api-reference.md`](docs/api-reference.md) for every endpoint.
-
-## Project status
-| Area | Status |
-|---|---|
-| Database design (ER diagrams) | ✅ done — `docs/er-diagrams/` |
-| Backend API | ✅ written (all components) — **not yet tested against a live database**, run the steps above and report any issue |
-| Frontend pages | ✅ UI only: landing, sign in, sign up, menu, admin dashboard |
-| Frontend ↔ backend connection | ⏳ not done — add API calls in `frontend/src/services/` |
-| Real payment gateway | ⏳ not done — payments are simulated (hook point marked in `backend/routes/payments.js`) |
-
-## Documentation
-- [Database schema](docs/database-schema.md) · [API reference](docs/api-reference.md) · [ER diagrams](docs/er-diagrams/)
-- [Backend README](backend/README.md) · [Frontend README](frontend/README.md)
+Endpoints in [`docs/api-reference.md`](docs/api-reference.md).

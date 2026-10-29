@@ -1,7 +1,7 @@
 # API reference
 
 Base URL (local): `http://localhost:5000/api` · JSON in, JSON out · ids are integers.
-Protected routes need the header `Authorization: Bearer <token>` (the token comes from `/auth/login` or `/auth/register`).
+Protected routes need the header `Authorization: Bearer <token>` (the token comes from `/auth/login`).
 
 Every component also has an open `GET /api/<name>/test` route that returns `"<Name> routes are working ✅"`.
 Responses look like `{ "success": true, "data": ... }`; errors like `{ "success": false, "message": "..." }`.
@@ -9,13 +9,14 @@ List endpoints return `{ count, total, page, pages, data }` and accept `?page=&l
 
 ## Roles
 `admin` · `manager` · `chef` · `delivery` · `customer`.
-Public sign-up always creates a **customer**; other roles are created by an admin via `/users`.
+There is no public sign-up. **Only `admin` accounts can sign in**, and every protected route needs an admin token.
+`customer` records are created by the admin via `/users` (a random password is set; they cannot sign in).
 
 ## Endpoints
 
 | Component (file) | Access | Endpoints |
 |---|---|---|
-| **Auth** `routes/auth.js` | public / logged in | `POST /auth/register` · `POST /auth/login` · `GET /auth/me` · `PATCH /auth/me` · `PATCH /auth/change-password` |
+| **Auth** `routes/auth.js` | public / logged in | `POST /auth/login` · `GET /auth/me` · `PATCH /auth/me` · `PATCH /auth/change-password` |
 | **Users** `routes/users.js` | admin | `GET /users` (`role`, `isActive`, `q`) · `GET /users/:id` · `POST /users` · `PUT /users/:id` · `DELETE /users/:id` |
 | **Menu** `routes/menu.js` | read: public · write: admin, manager | `GET /menu` (`category`, `foodType`, `isAvailable`, `q`) · `GET /menu/:id` · `POST /menu` · `PUT /menu/:id` · `DELETE /menu/:id` |
 | **Orders** `routes/orders.js` | logged in (customers see only their own) | `GET /orders` (`status`, `customerId`, `deliveryPartnerId`) · `GET /orders/:id` · `POST /orders` · `PATCH /orders/:id/status` (admin, manager, chef, delivery) · `PATCH /orders/:id/cancel` · `PUT /orders/:id` (admin, manager) · `DELETE /orders/:id` (admin) |
@@ -27,14 +28,13 @@ Public sign-up always creates a **customer**; other roles are created by an admi
 | **Salaries** `routes/salaries.js` | admin, manager | `GET /salaries` (`staffId`, `month`, `paymentStatus`) · `GET /salaries/:id` · `POST` · `PUT /:id` · `DELETE /:id` (admin) |
 | **Billing** `routes/billing.js` | logged in (customers: own bills) | `GET /billing` (`orderId`, `customerId`, `paymentStatus`) · `GET /billing/:id` · `POST` / `PUT /:id` (admin, manager) · `DELETE /:id` (admin) |
 | **Payments** `routes/payments.js` | logged in (customers: own payments) | `GET /payments` · `GET /payments/:id` · `POST /payments` · `PATCH /payments/:id/status` (admin, manager) · `PUT /:id` (admin, manager) · `DELETE /:id` (admin) |
-| **Dashboard** `routes/dashboard.js` | admin, manager | `GET /dashboard/summary` |
+| **Dashboard** `routes/dashboard.js` | admin, manager | `GET /dashboard/summary` (counts, revenue and `lowStockItems`) |
 
 ## Request examples
 
-**Sign up / sign in**
+**Sign in (admin)**
 ```json
-POST /api/auth/register   { "name": "Asha", "email": "asha@example.com", "password": "secret123", "phone": "9876543210" }
-POST /api/auth/login      { "email": "asha@example.com", "password": "secret123" }
+POST /api/auth/login      { "email": "admin@cloudkitchen.com", "password": "Admin@12345" }
 → { "success": true, "token": "<jwt>", "user": { ... } }
 ```
 
@@ -45,10 +45,10 @@ POST /api/menu
   "recipe": [ { "ingredientId": 1, "quantityRequired": 0.25 } ] }
 ```
 
-**Place an order** — prices always come from the database; a bill is created automatically
+**Place an order** — `customerId` is required; the address defaults to the customer's saved one; prices always come from the database; a bill is created automatically
 ```json
 POST /api/orders
-{ "items": [ { "menuItemId": 1, "quantity": 2 } ],
+{ "customerId": 2, "items": [ { "menuItemId": 1, "quantity": 2 } ],
   "deliveryAddress": { "flatNo": "B-12", "street": "MG Road", "city": "Ahilyanagar", "state": "Maharashtra" },
   "notes": "Less spicy" }
 ```

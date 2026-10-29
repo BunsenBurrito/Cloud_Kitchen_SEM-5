@@ -1,54 +1,41 @@
 # CloudKitchen Frontend
 
-React + Material UI frontend for the Cloud Kitchen Management System.
-Current status: **landing page only** (public page before sign in).
+React + Material UI admin app for the Cloud Kitchen Management System. A public landing page, one **admin sign-in**,
+and the admin screens for orders, billing, customers, menu and recipes, stock, suppliers, purchases, staff and salaries.
+It talks to the backend API (`../backend`); in development Vite forwards `/api` to `http://localhost:5000`.
 
-## Prerequisites
-- Node.js 18 or newer (check with `node -v`)
-- npm (comes with Node)
-
-## Run the project
+## Run
 ```bash
-cd frontend                  # 1. go into the project folder
-npm install                 # 2. install dependencies
-npm run dev                 # 3. start the dev server
+cd frontend
+npm install
+npm run dev        # http://localhost:3000  (start the backend first, see ../README.md)
 ```
-Open http://localhost:3000 in your browser.
+`npm run build` makes a production build in `dist/`; `npm run preview` serves it.
+Sign in with the admin account created by `npm run seed` in the backend (default `admin@cloudkitchen.com` / `Admin@12345`).
 
-Other commands:
-- `npm run build`   production build in `dist/`
-- `npm run preview` serve the production build locally
-
-## Project structure
+## Structure
 ```
-cloud-kitchen-frontend/
-├── index.html                  # HTML shell, loads Google Fonts
-├── vite.config.js              # Vite + React config, dev port 3000
-├── package.json
-└── src/
-    ├── main.jsx                # Entry: ThemeProvider + Router
-    ├── App.jsx                 # Root component
-    ├── routes/AppRoutes.jsx    # All routes in one place
-    ├── theme/theme.js          # Tomato palette + Inter (edit here)
-    ├── pages/
-    │   ├── Landing/LandingPage.jsx   # Public landing page
-    │   └── Auth/SignInPage.jsx       # Placeholder, built next
-    ├── components/
-    │   ├── landing/            # Navbar, Hero, Features, HowItWorks, Footer
-    │   └── common/             # Shared reusable components (empty for now)
-    ├── services/               # API calls (empty for now)
-    ├── hooks/                  # Custom hooks (empty for now)
-    ├── context/                # Context providers, e.g. auth (empty for now)
-    ├── utils/                  # Helpers (empty for now)
-    └── assets/                 # Images, logos
+src/
+├── main.jsx                    ThemeProvider + Router + Toast/Auth providers
+├── routes/AppRoutes.jsx        all routes; everything except / and /signin needs the admin signed in
+├── theme/theme.js              colour palette + Inter (edit here, components only use theme tokens)
+├── services/api.js             fetch wrapper (adds the admin token)
+├── context/                    AuthContext (admin session), ToastContext (notify messages)
+├── hooks/                      useList (paginated list + search), useOptions (dropdown data)
+├── utils/format.js             money, date helpers
+├── components/
+│   ├── landing/                Navbar, Hero, Features, HowItWorks, Footer
+│   └── common/                 AppLayout (sidebar), CrudPage, DataTable, FormDialog, ConfirmDialog, PageHeader, StatusChip
+└── pages/
+    ├── Landing/ Auth/SignInPage.jsx
+    ├── Dashboard/              totals, recent orders, low stock
+    ├── Orders/                 new order (existing or walk-in customer), status workflow, dispatch, cancel, details
+    ├── Billing/                bills, record payment, confirm / fail / refund payments
+    ├── Menu/                   dishes + recipe editor
+    ├── Purchases/              create purchase, receive (adds stock), cancel, mark paid
+    └── Manage/                 Ingredients, Inventory, Suppliers, Customers, Staff, Salaries (all built on CrudPage)
 ```
 
-## Changing the color palette
-Edit the `palette` object at the top of `src/theme/theme.js`. Components only use
-theme tokens (`primary.main`, `background.default`...), so nothing else needs changing.
-Palette: Tomato (#E94F37) plus status colors (success, warning, danger). Font: Inter.
-
-## Next steps
-1. Status chips for order, payment and stock status
-2. Sign-in / sign-up pages
-3. Pages for the ER entities: Orders, Items, Ingredients, Inventory, Supplier, Purchase, Staff, Salary, Billing
+## Notes
+- Only the admin can sign in. Customers are records the admin creates (they have no login).
+- To add another table page, copy one of the pages in `pages/Manage/` and change the `columns` and `fields`.
