@@ -41,7 +41,7 @@ erDiagram
 | USER | `User` | Customers **and** logins for staff/admin; `role` column; password stored as bcrypt hash |
 | STAFF | `Staff` | chef / delivery / manager / helper / cashier; optional link to a `User` login |
 | SALARY | `Salary` | One row per staff member per month (`YYYY-MM`, unique together) |
-| MENU | `MenuItem` | name, category, `foodType` (Veg / Non-Veg), price, availability |
+| MENU | `MenuItems` | name, category, `foodType` (Veg / Non-Veg), price, availability |
 | MENU_INGREDIENTS | `MenuIngredient` | Recipe: quantity of an ingredient for **one** serving |
 | ORDERS | `Order` | Status workflow, delivery address copied at order time |
 | ORDER_ITEMS | `OrderItem` | Name/price snapshot so later menu changes don't alter old orders |

@@ -3,7 +3,7 @@
 // Staff see the recipe when reading; the public does not.
 const router = require('express').Router();
 const { MenuItem, MenuIngredient, Ingredient, sequelize } = require('../models');
-const { STAFF_ROLES } = require('../config');
+const { ROLES } = require('../config');
 const { protect, optionalAuth, authorize } = require('../middleware');
 const { ApiError, asyncHandler, parseId, pick, filters, paginate, sendList, searchWhere } = require('../utils');
 
@@ -11,8 +11,14 @@ const FIELDS = ['name', 'category', 'foodType', 'price', 'description', 'imageUr
 const writers = [protect, authorize('admin', 'manager')];
 
 const includeFor = (req) =>
-  req.user && STAFF_ROLES.includes(req.user.role)
-    ? [{ model: MenuIngredient, as: 'recipe', include: [{ model: Ingredient, as: 'ingredient', attributes: ['id', 'name', 'unit'] }] }]
+  req.user && req.user.role === ROLES.ADMIN
+    ? [{
+        model: MenuIngredient, as: 'recipe',
+        include: [{
+          model: Ingredient,
+          as: 'ingredient',
+          attributes: ['id', 'name', 'unit']
+        }] }]
     : [];
 
 // Replaces a dish's recipe rows with the ones sent in the request (runs inside a transaction)
