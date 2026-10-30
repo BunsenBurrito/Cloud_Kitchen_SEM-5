@@ -41,6 +41,9 @@ router.post('/', asyncHandler(async (req, res) => {
     const bill = await Billing.findOne({ where: { id: parseId(billId, 'billId'), ...scope(req) }, transaction: t, lock: t.LOCK.UPDATE });
     if (!bill) throw new ApiError(404, 'Bill not found');
     if (bill.paymentStatus === 'paid') throw new ApiError(400, 'This bill is already paid');
+    // A cash payment stays "pending" (bill still "unpaid") until confirmed — don't record a second one
+    if (await Payment.count({ where: { billId: bill.id, status: 'pending' }, transaction: t }))
+      throw new ApiError(400, 'This bill already has a pending payment. Confirm or fail it in Payments first');
 
     const online = method !== 'cash';
     const created = await Payment.create(

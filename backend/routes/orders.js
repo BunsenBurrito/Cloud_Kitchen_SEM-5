@@ -114,7 +114,9 @@ router.patch('/:id/status', authorize('admin', 'manager', 'chef', 'delivery'), a
           needed.set(r.ingredientId, (needed.get(r.ingredientId) || 0) + r.quantityRequired * line.quantity);
         }
       }
-      for (const [ingredientId, qty] of needed) {
+      for (const [ingredientId, rawQty] of needed) {
+        // Round to the column's 3 decimals: 0.2 * 3 = 0.6000000000000001 would otherwise fail the stock check
+        const qty = Math.round(rawQty * 1000) / 1000;
         if (!(qty > 0)) continue;
         // The UPDATE only succeeds if enough stock is left
         const [affected] = await Ingredient.update(

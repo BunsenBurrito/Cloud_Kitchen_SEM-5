@@ -51,7 +51,7 @@ Cloud_Kitchen_SEM-5/
 cd backend
 npm install
 cp .env.example .env      # set DB_USER, DB_PASSWORD (MySQL login) and JWT_SECRET
-npm run seed              # creates the database + tables, an admin user, and the sample menu
+npm run seed              # creates the database + tables and the admin user
 npm run dev               # API on http://localhost:5000
 ```
 

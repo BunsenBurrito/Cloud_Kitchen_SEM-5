@@ -4,8 +4,10 @@ if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET is missing. Copy .env.example to .env and set it.');
 }
 
+// Only the admin signs in; customers are stored as records (role "customer") so orders and bills can point to them.
 const ROLES = {
   ADMIN: 'admin',
+  CUSTOMER: 'customer',
 };
 
 module.exports = {
@@ -22,6 +24,8 @@ module.exports = {
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     sqliteFile: process.env.DB_SQLITE_FILE || './cloud_kitchen.sqlite',
+    ssl: process.env.DB_SSL === 'true',   // cloud MySQL (e.g. Aiven) requires SSL
+    sslCa: process.env.DB_SSL_CA || '',   // optional path to the provider's CA certificate
   },
   ROLES,
 };
