@@ -10,11 +10,11 @@ const ssl = db.ssl
   ? db.sslCa ? { ca: require('fs').readFileSync(db.sslCa, 'utf8') } : { rejectUnauthorized: false }
   : undefined;
 
-const common = { dialect: db.dialect, logging: false, define: { timestamps: true } }; // logging: console.log shows SQL
+const common = { dialect: db.dialect, logging: false, define: { timestamps: true } };
 const sequelize =
   db.dialect === 'sqlite'
     ? new Sequelize({ ...common, storage: db.sqliteFile })
-    : new Sequelize(db.name, db.user, db.password, { ...common, host: db.host, port: db.port, ...(ssl && { dialectOptions: { ssl } }) });
+    : new Sequelize(db.name, db.user, db.password, { ...common, host: db.host, port: db.port });
 
 // Connects, creates the MySQL database if missing, and creates any missing tables.
 async function connectDB() {

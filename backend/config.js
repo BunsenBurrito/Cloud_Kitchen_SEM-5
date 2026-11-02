@@ -20,12 +20,10 @@ module.exports = {
     dialect: process.env.DB_DIALECT || 'mysql',
     host: process.env.DB_HOST || '127.0.0.1',
     port: parseInt(process.env.DB_PORT, 10) || 3306,
-    name: process.env.DB_NAME || 'cloud_kitchen',
+    name: process.env.DB_NAME || 'CloudKitchen',
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     sqliteFile: process.env.DB_SQLITE_FILE || './cloud_kitchen.sqlite',
-    ssl: process.env.DB_SSL === 'true',   // cloud MySQL (e.g. Aiven) requires SSL
-    sslCa: process.env.DB_SSL_CA || '',   // optional path to the provider's CA certificate
   },
   ROLES,
 };
