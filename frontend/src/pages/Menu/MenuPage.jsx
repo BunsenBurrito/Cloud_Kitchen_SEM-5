@@ -47,8 +47,10 @@ export default function MenuPage() {
       await action();
       notify(message);
       list.reload();
+      return true;
     } catch (e) {
       notify(e.message, 'error');
+      return false;
     }
   };
 
@@ -56,8 +58,8 @@ export default function MenuPage() {
     setSaving(true);
     const { name, category, foodType, price, description, imageUrl, isAvailable } = form;
     const body = { name, category, foodType, price, description: description || null, imageUrl: imageUrl || null, isAvailable, recipe: form.recipe.filter((r) => r.ingredientId) };
-    await run(() => (editId ? api.put(`/menu/${editId}`, body) : api.post('/menu', body)), editId ? 'Dish updated' : 'Dish added');
-    setForm(null);
+    if (await run(() => (editId ? api.put(`/menu/${editId}`, body) : api.post('/menu', body)), editId ? 'Dish updated' : 'Dish added'))
+      setForm(null);
     setSaving(false);
   };
 

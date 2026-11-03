@@ -5,14 +5,27 @@ const bcrypt = require('bcryptjs');
 const { db, ROLES } = require('./config');
 
 // ============================================================ connection
-const common = { dialect: db.dialect, logging: false, define: { timestamps: true } }; // logging: console.log shows SQL
+// With a CA file the server certificate is verified; without one the connection is still encrypted.
+const ssl = db.ssl
+  ? db.sslCa ? { ca: require('fs').readFileSync(db.sslCa, 'utf8') } : { rejectUnauthorized: false }
+  : undefined;
+
+const common = { dialect: db.dialect, logging: false, define: { timestamps: true } };
 const sequelize =
   db.dialect === 'sqlite'
     ? new Sequelize({ ...common, storage: db.sqliteFile })
     : new Sequelize(db.name, db.user, db.password, { ...common, host: db.host, port: db.port });
 
+// Connects, creates the MySQL database if missing, and creates any missing tables.
 async function connectDB() {
+  if (db.dialect === 'mysql') {
+    const mysql = require('mysql2/promise');
+    const conn = await mysql.createConnection({ host: db.host, port: db.port, user: db.user, password: db.password, ssl });
+    await conn.query(`CREATE DATABASE IF NOT EXISTS \`${db.name}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
+    await conn.end();
+  }
   await sequelize.authenticate();
+  await sequelize.sync(); // creates tables that don't exist yet (existing tables are left as they are)
   console.log(`SQL database connected (${db.dialect})`);
 }
 
